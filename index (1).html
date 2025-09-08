@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apresentação de Slides</title>
+  <!-- Fontes Raleway + Merriweather -->
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #02f3fc;
+      --secondary: #ffffffa9;
+      --accent: #00ff4c;
+      --dark: #0a0a0a;
+      --light: #ffffff;
+      --gray: #000000ee;
+      --slide-bg: #ffffff00;
+      --shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Merriweather', serif; /* Texto normal */
+      background: linear-gradient(135deg, #ffffff, #5c5c5caf);
+      color: var(--dark);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+    
+    h1, h2 {
+      font-family: 'Raleway', sans-serif; /* Títulos */
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    
+    h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+    }
+    
+    h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.3;
+    }
+    
+    p {
+      font-size: 1.25rem;
+      line-height: 1.8;
+      color: var(--gray);
+      margin-bottom: 1.5rem;
+    }
+    
+    ul {
+      list-style-type: none;
+      margin: 2rem 0;
+    }
+    
+    li {
+      font-size: 1.2rem;
+      line-height: 1.8;
+      margin-bottom: 1rem;
+      padding-left: 2rem;
+      position: relative;
+      color: var(--gray);
+    }
+    
+    li::before {
+      content: '▹';
+      color: var(--accent);
+      position: absolute;
+      left: 0;
+    }
+    
+    /* ... (o restante do CSS permanece igual) ... */
+
+    .presentation {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      position: relative;
+    }
+    
+    .slides-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      position: relative;
+    }
+    
+    .slide {
+      background: var(--slide-bg);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 3rem;
+      max-width: 900px;
+      width: 90%;
+      display: none;
+      animation: slideUp 0.6s ease-out forwards;
+      position: relative;
+      overflow: hidden;
+      border-left: 6px solid var(--secondary);
+    }
+    
+    .slide.active {
+      display: block;
+    }
+    
+    .title-slide {
+      text-align: center;
+      border-left: none;
+      background: linear-gradient(135deg, #ffffff00, #5c5c5c00);
+    }
+    
+    .title-slide::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 8px;
+      background: linear-gradient(90deg, #0501ff, #00ff0d);
+    }
+    
+    .title-content {
+      animation: fadeIn 1s ease-out forwards;
+    }
+    
+    .subtitle {
+      font-size: 1.5rem;
+      color: var(--gray);
+      margin-bottom: 3rem;
+      animation: fadeIn 1s ease-out 0.3s forwards;
+      opacity: 0;
+    }
+    
+    .presenters {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 3rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeIn 1s ease-out 0.6s forwards;
+    }
+    
+    .presenter {
+      background: rgb(0, 0, 0);
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgb(255, 255, 255);
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: var(--secondary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'Raleway', sans-serif;
+    }
+    
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background: rgba(255, 255, 255, 0);
+      backdrop-filter: blur(5px);
+      position: sticky;
+      bottom: 0;
+      width: 100%;
+      z-index: 10;
+      border-top: 1px solid rgba(3, 3, 3, 0);
+    }
+    
+    .btn {
+      background: var(--primary);
+      color: rgb(124, 124, 124);
+      border: none;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      font-family: 'Raleway', sans-serif;
+    }
+    
+    .btn:hover {
+      background: var(--secondary);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(108, 99, 255, 0.3);
+    }
+    
+    .btn:disabled {
+      background: #00000000;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    .progress-container {
+      flex: 1;
+      margin: 0 1.5rem;
+      height: 6px;
+      background: #ffffff00;
+      border-radius: 3px;
+      align-self: center;
+      overflow: hidden;
+    }
+    
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      border-radius: 3px;
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+    
+    .slide-counter {
+      font-size: 1rem;
+      color: var(--gray);
+      min-width: 70px;
+      text-align: center;
+      font-weight: 600;
+      font-family: 'Raleway', sans-serif;
+    }
+    
+    .footer-note {
+      position: absolute;
+      bottom: 1.5rem;
+      right: 2rem;
+      font-size: 0.85rem;
+      color: var(--gray);
+      opacity: 0.7;
+    }
+    
+    .color-swatch {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      margin-right: 8px;
+      vertical-align: middle;
+      border: 1px solid rgb(0, 0, 0);
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.5rem;
+      }
+      
+      h2 {
+        font-size: 2rem;
+      }
+      
+      p, li {
+        font-size: 1.1rem;
+      }
+      
+      .slide {
+        padding: 2rem 1.5rem;
+      }
+      
+      .subtitle {
+        font-size: 1.2rem;
+      }
+      
+      .presenter {
+        font-size: 1rem;
+        padding: 0.8rem 1.2rem;
+      }
+      
+      .btn {
+        padding: 0.7rem 1.2rem;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="presentation">
+    <div class="slides-container">
+      <!-- Slide de título -->
+      <div class="slide active title-slide">
+        <div class="title-content">
+          <h1>Empatia e solidariedade: sentimentos que constroem relações saudáveis</h1>
+          <p class="subtitle">Alunos</p>
+          <div class="presenters">
+            <span class="presenter"><i class="fas fa-user-graduate"></i> Yudi</span>
+            <span class="presenter"><i class="fas fa-user-graduate"></i> ícaro</span>
+          </div>
+        </div>
+        <div class="footer-note">Apresentação · Ano</div>
+      </div>
+      
+      <!-- Slides vazios -->
+      <div class="slide">
+        <h2>O que é empatia?</h2>
+        <p>É a capacidade de se colocar no lugar do outro, compreendendo seus sentimentos e perspectivas.
+
+Pode ser emocional (sentir junto) ou cognitiva (entender racionalmente).
+
+Ajuda a criar conexões humanas mais profundas.
+</p>
+        <div class="footer-note"></div>
+      </div>
+      
+      <div class="slide">
+        <h2>O que é solidariedade?</h2>
+        <p>É a atitude de agir em prol do bem do outro, especialmente em momentos de dificuldade.
+
+Vai além de compreender: envolve ação prática para ajudar, apoiar ou compartilhar.
+
+Promove senso de comunidade e cooperação.</p>
+        <div class="footer-note">     </div>
+      </div>
+      
+      <div class="slide">
+        <h2>Como constroem relações saudáveis?</h2>
+        <p>A empatia permite respeitar diferenças, resolver conflitos e fortalecer vínculos.
+
+A solidariedade mostra compromisso com o bem-estar coletivo, tornando os relacionamentos mais equilibrados e humanos.
+
+Juntas, criam ambientes de confiança, respeito mútuo e apoio.</p>
+        <div class="footer-note"></div>
+      </div>
+      
+      <div class="slide">
+        <h2> Exemplos do cotidiano</h2>
+        <p>Na escola: ouvir colegas que estão tristes, defender quem sofre bullying, compartilhar materiais.
+
+Na família: compreender quando alguém está cansado, ajudar nas tarefas.
+
+Na sociedade: apoiar causas sociais, doar tempo, recursos ou simplesmente oferecer atenção.</p>
+        <div class="footer-note"></div>
+      </div>
+      
+      <div class="slide">
+        <h2> Reflexão</h2>
+        <p>Empatia e solidariedade não são apenas sentimentos, mas atitudes que fortalecem comunidades. Quando praticadas, tornam a convivência mais justa, saudável e humana.</p>
+        <div class="footer-note"></div>
+      </div>
+    </div>
+    
+    <div class="controls">
+      <button class="btn" id="prevBtn"><i class="fas fa-chevron-left"></i> Anterior</button>
+      <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+      <div class="slide-counter" id="slideCounter">1/10</div>
+      <button class="btn" id="nextBtn">Próximo <i class="fas fa-chevron-right"></i></button>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const slides = document.querySelectorAll('.slide');
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const progressBar = document.getElementById('progressBar');
+      const slideCounter = document.getElementById('slideCounter');
+      
+      let currentSlide = 0;
+      
+      function updateSlide() {
+        slides.forEach((slide, index) => {
+          slide.classList.toggle('active', index === currentSlide);
+        });
+        
+        progressBar.style.width = `${(currentSlide + 1) / slides.length * 100}%`;
+        slideCounter.textContent = `${currentSlide + 1}/${slides.length}`;
+        
+        prevBtn.disabled = currentSlide === 0;
+        nextBtn.disabled = currentSlide === slides.length - 1;
+      }
+      
+      nextBtn.addEventListener('click', () => {
+        if (currentSlide < slides.length - 1) {
+          currentSlide++;
+          updateSlide();
+        }
+      });
+      
+      prevBtn.addEventListener('click', () => {
+        if (currentSlide > 0) {
+          currentSlide--;
+          updateSlide();
+        }
+      });
+      
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+          nextBtn.click();
+        } else if (e.key === 'ArrowLeft') {
+          prevBtn.click();
+        }
+      });
+      
+      updateSlide();
+    });
+  </script>
+</body>
+</html>
